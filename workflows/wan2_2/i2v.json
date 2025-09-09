@@ -1,0 +1,17 @@
+{
+  "0": {
+    "class_type": "WANLoader",
+    "inputs": {"ckpt_name": "wan2_2-lownoise.gguf"},
+    "_meta": {"title": "Load WAN 2.2 LowNoise"}
+  },
+  "1": {
+    "class_type": "WANInput",
+    "inputs": {"image": "input.png"},
+    "_meta": {"title": "WAN Input Image"}
+  },
+  "2": {
+    "class_type": "WANOutput",
+    "inputs": {"filename_prefix": "WAN_2_2_I2V"},
+    "_meta": {"title": "Save WAN Video"}
+  }
+}

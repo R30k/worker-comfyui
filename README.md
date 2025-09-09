@@ -40,6 +40,7 @@ These images are available on Docker Hub under `runpod/worker-comfyui`:
 - **`runpod/worker-comfyui:<version>-flux1-dev`**: Includes checkpoint, text encoders, and VAE for [FLUX.1 dev](https://huggingface.co/black-forest-labs/FLUX.1-dev).
 - **`runpod/worker-comfyui:<version>-sdxl`**: Includes checkpoint and VAEs for [Stable Diffusion XL](https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0).
 - **`runpod/worker-comfyui:<version>-sd3`**: Includes checkpoint for [Stable Diffusion 3 medium](https://huggingface.co/stabilityai/stable-diffusion-3-medium).
+- **`runpod/worker-comfyui:<version>-wan2_2`**: Bundles WAN 2.2 GGUF models (HighNoise and LowNoise) and default WAN workflows.
 
 Replace `<version>` with the current release tag, check the [releases page](https://github.com/runpod-workers/worker-comfyui/releases) for the latest version.
 
@@ -83,6 +84,9 @@ The following tables describe the fields within the `input` object:
 | `input`          | Object | Yes      | Top-level object containing request data.                                                                                                  |
 | `input.workflow` | Object | Yes      | The ComfyUI workflow exported in the [required format](#getting-the-workflow-json).                                                        |
 | `input.images`   | Array  | No       | Optional array of input images. Each image is uploaded to ComfyUI's `input` directory and can be referenced by its `name` in the workflow. |
+
+> [!TIP]
+> To run the built-in WAN 2.2 workflows, set `"worker_type": "wan2_2"` in the payload. You may also select the variant with `"workflow_name": "i2v"` or `"t2v"` (default). In this mode, providing a `workflow` block is optional.
 
 #### `input.images` Object
 

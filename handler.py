@@ -149,10 +149,25 @@ def validate_input(job_input):
         except json.JSONDecodeError:
             return None, "Invalid JSON format in input"
 
-    # Validate 'workflow' in input
+    # Validate 'workflow' in input, allow automatic loading for WAN 2.2
     workflow = job_input.get("workflow")
+    worker_type = job_input.get("worker_type")
     if workflow is None:
-        return None, "Missing 'workflow' parameter"
+        if worker_type == "wan2_2":
+            workflow_name = job_input.get("workflow_name", "t2v")
+            workflow_path = os.path.join(
+                "workflows", "wan2_2", f"{workflow_name}.json"
+            )
+            try:
+                with open(workflow_path, "r", encoding="utf-8") as f:
+                    workflow = json.load(f)
+            except FileNotFoundError:
+                return (
+                    None,
+                    f"Workflow file for WAN 2.2 '{workflow_name}' not found",
+                )
+        else:
+            return None, "Missing 'workflow' parameter"
 
     # Validate 'images' in input, if provided
     images = job_input.get("images")
