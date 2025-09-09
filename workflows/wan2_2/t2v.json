@@ -1,0 +1,12 @@
+{
+  "0": {
+    "class_type": "WANLoader",
+    "inputs": {"ckpt_name": "wan2_2-highnoise.gguf"},
+    "_meta": {"title": "Load WAN 2.2 HighNoise"}
+  },
+  "1": {
+    "class_type": "WANOutput",
+    "inputs": {"filename_prefix": "WAN_2_2_T2V"},
+    "_meta": {"title": "Save WAN Video"}
+  }
+}

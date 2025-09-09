@@ -73,8 +73,8 @@ WORKDIR /
 # Install Python runtime dependencies for the handler
 RUN uv pip install runpod requests websocket-client
 
-# Add application code and scripts
-ADD src/start.sh handler.py test_input.json ./
+# Add application code, workflows and scripts
+ADD src/start.sh handler.py test_input.json workflows ./
 RUN chmod +x /start.sh
 
 # Add script to install custom nodes
@@ -83,6 +83,12 @@ RUN chmod +x /usr/local/bin/comfy-node-install
 
 # Prevent pip from asking for confirmation during uninstall steps in custom nodes
 ENV PIP_NO_INPUT=1
+
+# Optionally install WAN 2.2 custom nodes
+ARG WAN_CUSTOM_NODES=""
+RUN if [ -n "$WAN_CUSTOM_NODES" ]; then \\
+      comfy-node-install $WAN_CUSTOM_NODES; \\
+    fi
 
 # Copy helper script to switch Manager network mode at container start
 COPY scripts/comfy-manager-set-mode.sh /usr/local/bin/comfy-manager-set-mode
@@ -131,6 +137,12 @@ RUN if [ "$MODEL_TYPE" = "flux1-dev" ]; then \
 
 RUN if [ "$MODEL_TYPE" = "flux1-dev-fp8" ]; then \
       wget -q -O models/checkpoints/flux1-dev-fp8.safetensors https://huggingface.co/Comfy-Org/flux1-dev/resolve/main/flux1-dev-fp8.safetensors; \
+    fi
+
+RUN if [ "$MODEL_TYPE" = "wan2_2" ]; then \
+      mkdir -p models/gguf && \
+      wget -q --header="Authorization: Bearer ${HUGGINGFACE_ACCESS_TOKEN}" -O models/gguf/wan2_2-highnoise.gguf https://huggingface.co/WAN-Lab/WAN2.2-GGUF/resolve/main/wan2_2-highnoise.gguf && \
+      wget -q --header="Authorization: Bearer ${HUGGINGFACE_ACCESS_TOKEN}" -O models/gguf/wan2_2-lownoise.gguf https://huggingface.co/WAN-Lab/WAN2.2-GGUF/resolve/main/wan2_2-lownoise.gguf; \
     fi
 
 # Stage 3: Final image
